@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>Dar Al-Qahwa — Specialty Coffee · Amman</title>
+
+  <!-- PWA Meta Tags -->
+  <meta name="application-name" content="Dar Al-Qahwa"/>
+  <meta name="description" content="Specialty coffee house in Jabal Al-Weibdeh, Amman. Browse the menu, order online, book a table, and collect loyalty stamps."/>
+  <meta name="theme-color" content="#8B5E3C"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="apple-mobile-web-app-title" content="Dar Al-Qahwa"/>
+  <meta name="msapplication-TileColor" content="#8B5E3C"/>
+  <meta name="msapplication-TileImage" content="/icons/icon-144.png"/>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Dar Al-Qahwa — Specialty Coffee · Amman"/>
+  <meta property="og:description" content="Order coffee, reserve a table, join our loyalty program. Jabal Al-Weibdeh, Amman."/>
+  <meta property="og:image" content="/icons/icon-512.png"/>
+
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" href="/icons/icon-152.png"/>
+  <link rel="apple-touch-icon" sizes="72x72"  href="/icons/icon-72.png"/>
+  <link rel="apple-touch-icon" sizes="96x96"  href="/icons/icon-96.png"/>
+  <link rel="apple-touch-icon" sizes="128x128" href="/icons/icon-128.png"/>
+  <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144.png"/>
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png"/>
+  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192.png"/>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-96.png"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-72.png"/>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json"/>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/main.css"/>
+
+  <!-- iOS Splash Screens -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+</head>
+<body>
+
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="loader-logo">Dar <span>Al-Qahwa</span></div>
+    <div class="loader-bar"><div class="loader-fill"></div></div>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div id="toast-container"></div>
+
+  <!-- Cart Sidebar -->
+  <div id="cart-overlay"></div>
+  <div id="cart-sidebar">
+    <div class="cart-header">
+      <h2 class="serif">Your Order</h2>
+      <button id="cart-close" aria-label="Close cart">✕</button>
+    </div>
+    <div id="cart-items"></div>
+    <div id="cart-footer" class="hidden">
+      <div class="cart-total-row">
+        <span>Total</span>
+        <span id="cart-total" class="serif"></span>
+      </div>
+      <div class="cart-fields">
+        <input type="text" id="cart-name" placeholder="Your name"/>
+        <input type="text" id="cart-table" placeholder="Table number (optional)"/>
+        <textarea id="cart-notes" placeholder="Special requests..." rows="2"></textarea>
+      </div>
+      <button id="cart-checkout" class="btn-primary w-full">Place Order</button>
+    </div>
+    <div id="cart-empty" class="cart-empty">
+      <span>☕</span>
+      <p>Your cart is empty</p>
+    </div>
+  </div>
+
+  <!-- Nav + App -->
+  <div id="nav-wrap"></div>
+  <div id="app"></div>
+
+  <!-- Scripts — order matters -->
+  <script src="/js/api.js"></script>
+  <script src="/js/lang.js"></script>
+  <script src="/js/animations.js"></script>
+  <script src="/js/pwa.js"></script>
+  <script src="/js/cart.js"></script>
+  <script src="/js/router.js"></script>
+  <script src="/js/pages/home.js"></script>
+  <script src="/js/pages/menu.js"></script>
+  <script src="/js/pages/reserve.js"></script>
+  <script src="/js/pages/order-confirm.js"></script>
+  <script src="/js/pages/login.js"></script>
+  <script src="/js/pages/gallery.js"></script>
+  <script src="/js/pages/loyalty.js"></script>
+  <script src="/js/pages/events.js"></script>
+  <script src="/js/pages/contact.js"></script>
+  <script src="/js/pages/qr.js"></script>
+  <script src="/js/pages/admin.js"></script>
+  <script src="/js/app.js"></script>
+
+  <!-- Init PWA after everything loads -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Patch Cart.render to also update bottom nav badge
+      const origRender = Cart.render.bind(Cart);
+      Cart.render = function() {
+        origRender();
+        const count = Cart.items ? Cart.items.reduce((s,i) => s + i.qty, 0) : 0;
+        PWA.updateCartBadge(count);
+      };
+
+      PWA.init();
+    });
+  </script>
+</body>
+</html>
